@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Timer</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<!--<style type="text/css">
+	#currentSetValue {
+		font-size: 30px;
+		color: red;
+	}
+</style>
+
+-->
+
+<script type="text/javascript">
+	var SetTime = 5;		// 최초 설정 시간(기본 : 초)
+	var SetSet = 10;			//인터벌 반복 횟수
+	var currentset =0;
+
+
+	/**$(documnet).ready(function() {
+		$('#IsetTime').val('SetTime');
+	});*/
+
+
+
+
+	window.onload = function() {
+
+
+		var button1 = document.getElementById("startBt");
+		var button2 = document.getElementById("stopBt");
+		var button3 = document.getElementById("valueSetBt");
+
+		//시작 버튼 실행 함수
+		button1.onclick = function() {
+			 tid=setInterval('msg_time()',1000) ;
+		}
+		//종료 버튼 실행 함수
+		button2.onclick = function() {
+			clearInterval(tid);		// 타이머 해제
+		}
+		button3.onclick = function() {
+			SetTime = document.getElementById("IsetTime").value;
+
+			SetSet = document.getElementById("IsetSet").value;
+		}
+
+	}
+
+	//사운드 재생 함수
+	function playsound(i) {
+
+		if( i == 1 ) {
+		var sound = document.getElementById("audio1");
+		sound.play()
+		}
+		else if(i == 2) {
+		var sound = document.getElementById("audio2");
+		sound.play()
+		}
+	}
+
+	//시간 카운트 함수
+	function msg_time() {	// 1초씩 카운트
+
+
+		m = Math.floor(SetTime / 60) + "분 " + (SetTime % 60) + "초";	// 남은 시간 계산
+
+		var msg = "현재 남은 시간은 <font color='red'>" + m + "</font> 입니다. <br>현재 남은 세트는 <font color='blue'>" + currentset + "</font>입니다.";
+
+		document.all.ViewTimer.innerHTML = msg;		// div 영역에 보여줌
+
+		SetTime--;					// 1초씩 감소
+		playsound(1);
+
+		if (SetTime < 0) {			// 시간이 종료 되었으면..
+			SetTime = document.getElementById("IsetTime").value;;
+			currentset++;
+			playsound(2);
+		}
+		else if (SetSet <=currentset) {
+			clearInterval(tid);
+			alert("인터벌이 종료 되었습니다.");
+		}
+
+	}
+
+	function Timemodify() {
+		var x = document.getElementById("IsetTime").value;
+		SetTime = x;
+		var msg1 = "현재 설정 시간은 " + SetTime + " 입니다.";
+		document.all.currentTimeValue.innerHTML = msg1;
+	}
+	function Setmodify() {
+		var x = document.getElementById("IsetSet").value;
+		SetSet = x;
+		var msg1 = "현재 설정 세트은 " + SetSet + " 입니다.";
+		document.all.currentSetValue.innerHTML = msg1;
+	}
+
+
+
+
+
+	</script>
+
+</head>
+
+<body >
+	<div id="AudioSection">
+		<audio id="audio1" src="http://www.soundjay.com/button/beep-07.wav" autostart="false" ></audio>
+		<audio id="audio2" src="https://www.soundjay.com/button/sounds/beep-01a.mp3" autostart="false" ></audio>
+	</div>
+	<div id="currentTimeValue"></div>
+	<div id="currentSetValue"></div>
+
+
+	<div id="InputDataSection">
+		<p>설정 타이머 입력 :
+			<input type="text"  id="IsetTime" name="IsetTime" onchange="Timemodify()" size="5">
+		</p>
+		<p>설정 세트 입력 :
+			<input type="text" id="IsetSet" name="IsetSet" onchange="Setmodify()" size="5">
+		</p>
+			<!--<button type="button" id="valueSetBt">변경</button>-->
+	</div>
+
+	<div id="ButtonSection">
+		<button type="button" class="btn btn-primary" id ="startBt">시작</button>
+		<button type="button" class="btn btn-danger" id="stopBt">종료</button>
+	</div>
+
+
+	<div id="ViewTimer"></div>
+
+</body>
+</html>
+
+
